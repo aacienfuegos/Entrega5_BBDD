@@ -85,8 +85,17 @@ exports.delete = async (rl) => {
 
 // Start new quiz round
 exports.play = async(rl) => {
+	let quizzes = await Quiz.findAll(
+		{ include: [{
+        	model: User,
+        	as: 'author'
+      	}]
+    	}
+  	);
+	let id_max = quizzes.length;
+
 	var id;
-	for(id = 1; id<5; id++){
+	for(id = 1; id<=id_max; id++){
 		let quiz = await Quiz.findByPk(Number(id));
 		if (!quiz) throw new Error(`  Quiz '${id}' is not in DB`);
 
@@ -96,6 +105,7 @@ exports.play = async(rl) => {
 			rl.log(`  The answer "${answered}" is right!`);
 		} else {
 			rl.log(`  The answer "${answered}" is wrong!`);
+			break;
 		}
 	}
 
