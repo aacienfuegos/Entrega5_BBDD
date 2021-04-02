@@ -92,21 +92,30 @@ exports.play = async(rl) => {
       	}]
     	}
   	);
-	let id_max = quizzes.length;
+	var q_left = quizzes.length;
+	var id; 
+	var quiz;
+	var score = 0;
 
-	var id;
-	for(id = 1; id<=id_max; id++){
-		let quiz = await Quiz.findByPk(Number(id));
-		if (!quiz) throw new Error(`  Quiz '${id}' is not in DB`);
+	while(q_left>0){
+		id = Math.floor(Math.random()*q_left);
+		quiz = quizzes[id];		
+		quizzes.splice(id,1);
+		q_left = quizzes.length;
+		//let quiz = await Quiz.findByPk(Number(id));
+		//if (!quiz) throw new Error(`  Quiz '${id}' is not in DB`);
 
 		let answered = await rl.questionP(quiz.question);
 
 		if (answered.toLowerCase().trim()===quiz.answer.toLowerCase().trim()) {
 			rl.log(`  The answer "${answered}" is right!`);
+			score++;
 		} else {
 			rl.log(`  The answer "${answered}" is wrong!`);
 			break;
 		}
 	}
+
+	console.log(score);
 
 }
