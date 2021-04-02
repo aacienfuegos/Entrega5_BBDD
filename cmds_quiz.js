@@ -116,6 +116,6 @@ exports.play = async(rl) => {
 		}
 	}
 
-	console.log(score);
+	rl.log('Score: ' + score);
 
 }
