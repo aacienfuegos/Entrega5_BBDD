@@ -19,7 +19,7 @@ exports.list = async (rl) =>  {
 // Create quiz with <question> and <answer> in the DB
 exports.create = async (rl) => {
 
-  let name = await rl.questionP("Enter user");
+	let name = await rl.questionP("Enter user");
     let user = await User.findOne({where: {name}});
     if (!user) throw new Error(`User ('${name}') doesn't exist!`);
 
@@ -83,3 +83,20 @@ exports.delete = async (rl) => {
   rl.log(`  ${id} deleted from DB`);
 }
 
+// Start new quiz round
+exports.play = async(rl) => {
+	var id;
+	for(id = 1; id<5; id++){
+		let quiz = await Quiz.findByPk(Number(id));
+		if (!quiz) throw new Error(`  Quiz '${id}' is not in DB`);
+
+		let answered = await rl.questionP(quiz.question);
+
+		if (answered.toLowerCase().trim()===quiz.answer.toLowerCase().trim()) {
+			rl.log(`  The answer "${answered}" is right!`);
+		} else {
+			rl.log(`  The answer "${answered}" is wrong!`);
+		}
+	}
+
+}

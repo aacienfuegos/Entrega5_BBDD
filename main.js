@@ -36,6 +36,7 @@ rl.on('line', async (line) => {
     else if (['tq', 'qt', 't'].includes(cmd)) { await quiz.test(rl);}
     else if (['uq', 'qu'].includes(cmd))      { await quiz.update(rl);}
     else if (['dq', 'qd'].includes(cmd))      { await quiz.delete(rl);}
+    else if (['p'].includes(cmd))				      { await quiz.play(rl);}
 
     else if (['lf', 'fl', 'f'].includes(cmd)) { await favs.list(rl);}
     else if (['cf', 'fc'].includes(cmd))      { await favs.create(rl);}
