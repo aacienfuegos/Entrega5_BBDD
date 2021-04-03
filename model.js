@@ -45,7 +45,7 @@ Score.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        isInteger: true,
+        isInt: true,
         min: { args:   [0], msg: "Wins: less than 0"},
       }
     }
