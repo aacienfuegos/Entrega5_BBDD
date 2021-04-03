@@ -1,5 +1,6 @@
 
 const {User, Quiz, Score} = require("./model.js").models;
+const { Sequelize } = require('sequelize');
 
 // Show all quizzes in DB including <id> and <author>
 exports.list = async (rl) =>  {
@@ -85,26 +86,18 @@ exports.delete = async (rl) => {
 
 // Start new quiz round
 exports.play = async(rl) => {
-	let quizzes = await Quiz.findAll(
-		{ include: [{
+	let quizzes = await Quiz.findAll({ 
+		order: Sequelize.fn('RANDOM'),
+		include: [{
         	model: User,
         	as: 'author'
       	}]
-    	}
-  	);
-	var q_left = quizzes.length;
-	var id; 
-	var quiz;
-	var score = 0;
+    	});
 
-	while(q_left>0){
-		id = Math.floor(Math.random()*q_left);
-		quiz = quizzes[id];		
-		quizzes.splice(id,1);
-		q_left = quizzes.length;
-		//let quiz = await Quiz.findByPk(Number(id));
-		//if (!quiz) throw new Error(`  Quiz '${id}' is not in DB`);
-
+	let score = 0;
+	let id; 
+	for(id=0; id<quizzes.length; id++){
+		quiz = quizzes[id];
 		let answered = await rl.questionP(quiz.question);
 
 		if (answered.toLowerCase().trim()===quiz.answer.toLowerCase().trim()) {
