@@ -1,5 +1,5 @@
 
-const {User, Quiz} = require("./model.js").models;
+const {User, Quiz, Score} = require("./model.js").models;
 
 exports.help = (rl) => 
   rl.log(
@@ -11,6 +11,7 @@ exports.help = (rl) =>
     > ru | ur | r    ## user: read (show age)
     > uu             ## user: update
     > du | ud        ## user: delete
+    > ls             ## quiz: list score
     >
     > lq | ql | q    ## quizzes: list all
     > cq | qc        ## quiz: create
@@ -114,3 +115,12 @@ exports.delete = async (rl) => {
   rl.log(`  ${name} deleted from DB`);  
 }
 
+// List score of users
+exports.score = async (rl) => {
+	let scores = await Score.findAll({
+		order: [["wins","DESC"]],
+		include:[{model: User, as:'user'}]
+	});
+
+	scores.forEach( s => rl.log(`  ${s.user.name}|${s.wins}|${s.createdAt.toUTCString()}`));
+}

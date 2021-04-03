@@ -64,12 +64,12 @@ User.hasMany(Quiz, {
   foreignKey: 'authorId'
 });
 Score.belongsTo(User, {
-  as: 'scores', 
+  as: 'user', 
   foreignKey: 'userId', 
   onDelete: 'CASCADE'
 });
 User.hasMany(Score, {
-  as: 'users', 
+  as: 'scores', 
   foreignKey: 'userId'
 });
 
