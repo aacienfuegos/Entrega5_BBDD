@@ -1,5 +1,5 @@
 
-const {User, Quiz} = require("./model.js").models;
+const {User, Quiz, Score} = require("./model.js").models;
 
 // Show all quizzes in DB including <id> and <author>
 exports.list = async (rl) =>  {
@@ -117,5 +117,22 @@ exports.play = async(rl) => {
 	}
 
 	rl.log('Score: ' + score);
+
+	let name = await rl.questionP("Enter user");
+    if (!name) throw new Error("Name can't be empty!");
+
+    let user = await User.findOne({where: {name}});
+	if(!user){
+		let age = 0;
+		await User.create( 
+			{ name, age }
+		);
+    	user = await User.findOne({where: {name}});
+	}
+	await Score.create(
+		{ wins: score,
+		userId: user.id
+		}
+	);
 
 }
